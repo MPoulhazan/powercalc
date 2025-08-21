@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartOptions } from 'chart.js';
 import './Amortizer.scss';
 
 // Enregistrer les composants Chart.js
@@ -106,13 +106,13 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
         }).format(amount);
     };
 
-    const formatPercentage = (rate: number) => {
-        return `${rate.toFixed(2)}%`;
-    };
-
     // Préparer les données pour le graphique circulaire
     const chartData = {
-        labels: [t('amortizer.results.loanAmount'), t('amortizer.results.totalInterest'), t('amortizer.results.downPayment')],
+        labels: [
+            t('amortizer.results.loanAmount'),
+            t('amortizer.results.totalInterest'),
+            t('amortizer.results.downPayment'),
+        ],
         datasets: [
             {
                 data: [loanAmount, totalInterest, downPayment],
@@ -123,7 +123,6 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
                 ],
                 borderColor: ['#667eea', '#48bb78', '#38b2ac'],
                 borderWidth: 3,
-                borderColor: '#1a202c',
                 hoverBackgroundColor: [
                     'rgba(102, 126, 234, 1)',
                     'rgba(72, 187, 120, 1)',
@@ -135,21 +134,21 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
         ],
     };
 
-    const chartOptions = {
+    const chartOptions: ChartOptions<'doughnut'> = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'bottom' as const,
+                position: 'bottom',
                 labels: {
                     color: '#e2e8f0',
                     font: {
                         family: 'Inter',
                         size: 12,
-                        weight: '500',
+                        weight: 500, // 👈 number au lieu de string
                     },
                     usePointStyle: true,
-                    pointStyle: 'circle',
+                    pointStyle: 'circle', // 👈 littéral reconnu
                     padding: 20,
                 },
             },
@@ -160,7 +159,7 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
                 font: {
                     family: 'Inter',
                     size: 16,
-                    weight: '600',
+                    weight: 600, // 👈 pareil, number
                 },
                 padding: {
                     top: 10,
@@ -176,7 +175,7 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
                 cornerRadius: 8,
                 displayColors: true,
                 callbacks: {
-                    label: function (context: any) {
+                    label: function (context) {
                         const value = context.parsed;
                         const total = context.dataset.data.reduce(
                             (a: number, b: number) => a + b,
@@ -201,12 +200,8 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
     return (
         <div className={`amortizer ${className}`}>
             <div className="amortizer__header">
-                <h2 className="amortizer__title">
-                    {t('amortizer.title')}
-                </h2>
-                <p className="amortizer__subtitle">
-                    {t('amortizer.subtitle')}
-                </p>
+                <h2 className="amortizer__title">{t('amortizer.title')}</h2>
+                <p className="amortizer__subtitle">{t('amortizer.subtitle')}</p>
             </div>
 
             <div className="amortizer__content">
@@ -342,9 +337,15 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
                             }
                             className="amortizer__select"
                         >
-                            <option value="monthly">{t('amortizer.paymentFrequencies.monthly')}</option>
-                            <option value="bi-weekly">{t('amortizer.paymentFrequencies.biWeekly')}</option>
-                            <option value="weekly">{t('amortizer.paymentFrequencies.weekly')}</option>
+                            <option value="monthly">
+                                {t('amortizer.paymentFrequencies.monthly')}
+                            </option>
+                            <option value="bi-weekly">
+                                {t('amortizer.paymentFrequencies.biWeekly')}
+                            </option>
+                            <option value="weekly">
+                                {t('amortizer.paymentFrequencies.weekly')}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -428,7 +429,9 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
                         <ul className="amortizer__info-list">
                             <li className="amortizer__info-item">
                                 <span className="amortizer__info-icon">⚠️</span>
-                                <strong>{t('amortizer.info.minDownPayment')}</strong>
+                                <strong>
+                                    {t('amortizer.info.minDownPayment')}
+                                </strong>
                             </li>
                             <li className="amortizer__info-item">
                                 <span className="amortizer__info-icon">🏦</span>
@@ -436,7 +439,9 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
                             </li>
                             <li className="amortizer__info-item">
                                 <span className="amortizer__info-icon">📈</span>
-                                <strong>{t('amortizer.info.stressTest')}</strong>
+                                <strong>
+                                    {t('amortizer.info.stressTest')}
+                                </strong>
                             </li>
                             <li className="amortizer__info-item">
                                 <span className="amortizer__info-icon">💳</span>
@@ -461,11 +466,21 @@ const Amortizer: React.FC<AmortizerProps> = ({ className = '' }) => {
                         <table className="amortizer__table">
                             <thead>
                                 <tr>
-                                    <th>{t('amortizer.table.headers.number')}</th>
-                                    <th>{t('amortizer.table.headers.payment')}</th>
-                                    <th>{t('amortizer.table.headers.principal')}</th>
-                                    <th>{t('amortizer.table.headers.interest')}</th>
-                                    <th>{t('amortizer.table.headers.balance')}</th>
+                                    <th>
+                                        {t('amortizer.table.headers.number')}
+                                    </th>
+                                    <th>
+                                        {t('amortizer.table.headers.payment')}
+                                    </th>
+                                    <th>
+                                        {t('amortizer.table.headers.principal')}
+                                    </th>
+                                    <th>
+                                        {t('amortizer.table.headers.interest')}
+                                    </th>
+                                    <th>
+                                        {t('amortizer.table.headers.balance')}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>

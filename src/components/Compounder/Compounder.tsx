@@ -11,6 +11,7 @@ import {
     Tooltip,
     Legend,
     Filler,
+    ChartOptions,
 } from 'chart.js';
 import './Compounder.scss';
 
@@ -191,21 +192,21 @@ const Compounder: React.FC<CompounderProps> = ({ className = '' }) => {
         ],
     };
 
-    const chartOptions = {
+    const chartOptions: ChartOptions<'line'> = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'top' as const,
+                position: 'top',
                 labels: {
                     color: '#e2e8f0',
                     font: {
                         family: 'Inter',
                         size: 12,
-                        weight: '500',
+                        weight: 500, // 👈 nombre
                     },
                     usePointStyle: true,
-                    pointStyle: 'circle',
+                    pointStyle: 'circle', // 👈 littéral valide
                 },
             },
             title: {
@@ -215,7 +216,7 @@ const Compounder: React.FC<CompounderProps> = ({ className = '' }) => {
                 font: {
                     family: 'Inter',
                     size: 16,
-                    weight: '600',
+                    weight: 600, // 👈 nombre
                 },
             },
             tooltip: {
@@ -227,7 +228,7 @@ const Compounder: React.FC<CompounderProps> = ({ className = '' }) => {
                 cornerRadius: 8,
                 displayColors: true,
                 callbacks: {
-                    label: function (context: any) {
+                    label: function (context) {
                         return `${context.dataset.label}: ${formatCurrency(
                             context.parsed.y
                         )}`;
@@ -237,9 +238,11 @@ const Compounder: React.FC<CompounderProps> = ({ className = '' }) => {
         },
         scales: {
             x: {
+                border: {
+                    color: 'rgba(102, 126, 234, 0.2)', // ✅ déplacé ici
+                },
                 grid: {
                     color: 'rgba(102, 126, 234, 0.1)',
-                    borderColor: 'rgba(102, 126, 234, 0.2)',
                 },
                 ticks: {
                     color: '#a0aec0',
@@ -250,9 +253,11 @@ const Compounder: React.FC<CompounderProps> = ({ className = '' }) => {
                 },
             },
             y: {
+                border: {
+                    color: 'rgba(102, 126, 234, 0.2)', // ✅ déplacé ici aussi
+                },
                 grid: {
                     color: 'rgba(102, 126, 234, 0.1)',
-                    borderColor: 'rgba(102, 126, 234, 0.2)',
                 },
                 ticks: {
                     color: '#a0aec0',
@@ -260,15 +265,15 @@ const Compounder: React.FC<CompounderProps> = ({ className = '' }) => {
                         family: 'Inter',
                         size: 11,
                     },
-                    callback: function (value: any) {
-                        return formatCurrency(value);
+                    callback: function (value) {
+                        return formatCurrency(Number(value));
                     },
                 },
             },
         },
         interaction: {
             intersect: false,
-            mode: 'index' as const,
+            mode: 'index',
         },
         elements: {
             point: {
