@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        sans-serif;
+    background: #0a0a0a;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+.app {
+    min-height: 100vh;
+    background: linear-gradient(
+        135deg,
+        #0f1419 0%,
+        #1a2332 25%,
+        #2d3748 50%,
+        #1a2332 75%,
+        #0f1419 100%
+    );
+    position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+                circle at 20% 80%,
+                rgba(120, 119, 198, 0.3) 0%,
+                transparent 50%
+            ),
+            radial-gradient(
+                circle at 80% 20%,
+                rgba(255, 119, 198, 0.3) 0%,
+                transparent 50%
+            ),
+            radial-gradient(
+                circle at 40% 40%,
+                rgba(120, 119, 198, 0.2) 0%,
+                transparent 50%
+            );
+        pointer-events: none;
+    }
+
+    &__container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding-top: 2rem;
+    }
+
+    &__header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    &__language-selector {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    &__content {
+        text-align: center;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    &__calculator {
+        width: 100%;
+        margin-top: 2rem;
+    }
+
+    &__subtitle {
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: #a0aec0;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto;
+        opacity: 0;
+        animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s
+            forwards;
+    }
+}
+
+// Animations
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Effet de particules flottantes
+.app::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(
+            2px 2px at 20px 30px,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        ),
+        radial-gradient(
+            2px 2px at 40px 70px,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        ),
+        radial-gradient(
+            1px 1px at 90px 40px,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        ),
+        radial-gradient(
+            1px 1px at 130px 80px,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        ),
+        radial-gradient(
+            2px 2px at 160px 30px,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        );
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: sparkle 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes sparkle {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-100px);
+    }
+}
+
+// Responsive
+@media (max-width: 768px) {
+    .app {
+        &__container {
+            padding: 1rem;
+        }
+
+        &__subtitle {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+        }
+    }
+}
+
+// Scrollbar personnalisée
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a2332;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
